@@ -47,7 +47,7 @@ def make_image_tiles(image_path, directory_name):
 def generate_hash_list_of_tiles(tiles_directory_name):
     tiles_directory = os.path.join(common_image_tiles_path, tiles_directory_name)
     files_list = os.listdir(tiles_directory)
-    files_list.sort()
+
 
     hash_result = []
     for file in files_list:
