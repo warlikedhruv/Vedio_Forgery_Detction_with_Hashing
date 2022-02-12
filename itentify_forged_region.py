@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 import hashlib
 from PIL import Image, ImageOps
+import cv2
 
 source_image_path = None
 target_image_path = None
@@ -47,7 +48,7 @@ def make_image_tiles(image_path, directory_name):
 def generate_hash_list_of_tiles(tiles_directory_name):
     tiles_directory = os.path.join(common_image_tiles_path, tiles_directory_name)
     files_list = os.listdir(tiles_directory)
-
+    files_list.sort()
 
     hash_result = []
     for file in files_list:
@@ -63,7 +64,11 @@ def generate_hash_list_of_tiles(tiles_directory_name):
 def hash_compare_and_highlight(source_image_tiles_hash, target_image_tiles_hash, target_tiles_dir):
     tiles_directory = os.path.join(common_image_tiles_path, target_tiles_dir)
     target_image_tiles_paths = os.listdir(tiles_directory)
+    target_image_tiles_paths.sort()
     COUNTER = 0
+    print(target_image_tiles_paths)
+    print(source_image_tiles_hash)
+    print(target_image_tiles_hash)
     for source_image_hash, target_image_hash in zip(source_image_tiles_hash, target_image_tiles_hash):
         if source_image_hash != target_image_hash:
             img = Image.open(tiles_directory + "/" + target_image_tiles_paths[COUNTER])
@@ -71,13 +76,16 @@ def hash_compare_and_highlight(source_image_tiles_hash, target_image_tiles_hash,
             img_with_border = ImageOps.expand(img, border=1, fill='green')
             img_with_border = img_with_border.resize((width, height), Image.ANTIALIAS)
             img_with_border.save(tiles_directory + "/" + target_image_tiles_paths[COUNTER])
+            # cv2.imshow('image', img)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()
         COUNTER += 1
 
     joined = image_slicer.open_images_in(tiles_directory)
     join = image_slicer.join(joined)
 
     rgb_im = join.convert('RGB')
-    rgb_im.save(target_image_path)
+    rgb_im.save("result/result.png")
 
 
 def identify_and_highlight(source_frame_path, target_frame_path):
@@ -107,10 +115,10 @@ def identify_and_highlight(source_frame_path, target_frame_path):
 
 def main():
     import cv2
-    img = cv2.imread("source_frames/image0.jpg")
-    print(img.shape)
+    # img = cv2.imread("source_frames/image0.jpg")
+    # print(img.shape)
 
     #identify_and_highlight("source_frames/9_original.png", "target_frames/9_forged.png")
-
+    identify_and_highlight("original/original.png", "tampered/tampered.png")
 
 main()
