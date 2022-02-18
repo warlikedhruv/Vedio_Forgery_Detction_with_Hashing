@@ -15,4 +15,6 @@ def convert(frames_dir, frames):
 
 def convert_image_to_video(frames_dir_path):
     frames = os.listdir(frames_dir_path)
+    frames.sort()
+    # print(frames)
     convert(frames_dir_path, frames)

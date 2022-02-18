@@ -3,6 +3,7 @@ import os
 import numpy as np
 from PIL import Image, ImageOps
 import hashlib
+from itentify_forged_region import identify_and_highlight
 
 
 def make_image_hash(image_path):
@@ -14,8 +15,10 @@ def make_image_hash(image_path):
 def compare_frames(source_frame_path, target_frame_path):
     source_frame_hash = make_image_hash(source_frame_path)
     target_frame_hash = make_image_hash(target_frame_path)
+
     if source_frame_hash != target_frame_hash:
         print("False")
+        identify_and_highlight(source_frame_path, target_frame_path)
     else:
         print("True")
 

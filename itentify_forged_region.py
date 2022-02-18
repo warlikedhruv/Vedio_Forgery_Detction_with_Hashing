@@ -65,17 +65,21 @@ def hash_compare_and_highlight(source_image_tiles_hash, target_image_tiles_hash,
     tiles_directory = os.path.join(common_image_tiles_path, target_tiles_dir)
     target_image_tiles_paths = os.listdir(tiles_directory)
     target_image_tiles_paths.sort()
+    # print(target_image_tiles_paths)
     COUNTER = 0
-    print(target_image_tiles_paths)
-    print(source_image_tiles_hash)
-    print(target_image_tiles_hash)
+    # print(target_image_tiles_paths)
+    # print(source_image_tiles_hash)
+    # print(target_image_tiles_hash)
     for source_image_hash, target_image_hash in zip(source_image_tiles_hash, target_image_tiles_hash):
         if source_image_hash != target_image_hash:
-            img = Image.open(tiles_directory + "/" + target_image_tiles_paths[COUNTER])
-            width, height = img.size
-            img_with_border = ImageOps.expand(img, border=1, fill='green')
-            img_with_border = img_with_border.resize((width, height), Image.ANTIALIAS)
-            img_with_border.save(tiles_directory + "/" + target_image_tiles_paths[COUNTER])
+            # img = Image.open(tiles_directory + "/" + target_image_tiles_paths[COUNTER])
+            img = cv2.imread(tiles_directory + "/" + target_image_tiles_paths[COUNTER])
+            dimensions = img.shape
+            # img_with_border = ImageOps.expand(img, border=1, fill='green')
+            # img_with_border = img_with_border.resize((width, height), Image.ANTIALIAS)
+            # img_with_border.save(tiles_directory + "/" + target_image_tiles_paths[COUNTER])
+            cv2.rectangle(img, (0, 0), (dimensions[1]-1, dimensions[0]-1), (0, 255, 0), 1)
+            cv2.imwrite(tiles_directory + "/" + target_image_tiles_paths[COUNTER], img)
             # cv2.imshow('image', img)
             # cv2.waitKey(0)
             # cv2.destroyAllWindows()
@@ -85,7 +89,7 @@ def hash_compare_and_highlight(source_image_tiles_hash, target_image_tiles_hash,
     join = image_slicer.join(joined)
 
     rgb_im = join.convert('RGB')
-    rgb_im.save("result/result.png")
+    rgb_im.save(target_image_path)
 
 
 def identify_and_highlight(source_frame_path, target_frame_path):
@@ -118,7 +122,6 @@ def main():
     # img = cv2.imread("source_frames/image0.jpg")
     # print(img.shape)
 
-    #identify_and_highlight("source_frames/9_original.png", "target_frames/9_forged.png")
-    identify_and_highlight("original/original.png", "tampered/tampered.png")
-
+    # identify_and_highlight("source_frames/9_original.png", "target_frames/9_forged.png")
+    identify_and_highlight("source_frames/original.png", "target_frames/target.png")
 main()
