@@ -15,7 +15,7 @@ def make_image_hash(image_path):
 def compare_frames(source_frame_path, target_frame_path):
     source_frame_hash = make_image_hash(source_frame_path)
     target_frame_hash = make_image_hash(target_frame_path)
-
+    # print(source_frame_path, target_frame_path)
     if source_frame_hash != target_frame_hash:
         print("False")
         identify_and_highlight(source_frame_path, target_frame_path)
@@ -29,4 +29,5 @@ def process_frames(source_frames_path, target_frames_path):
     source_frames_img.sort()
     target_frames_img.sort()
     for source_image, target_image in zip(source_frames_img, target_frames_img):
+        # print(os.path.join(source_frames_path, source_image), os.path.join(target_frames_path, target_image))
         compare_frames(os.path.join(source_frames_path, source_image), os.path.join(target_frames_path, target_image))

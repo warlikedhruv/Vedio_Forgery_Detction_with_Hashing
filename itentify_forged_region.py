@@ -22,20 +22,28 @@ def create_or_remove_tiles_dir(directory_name):
 
 
 def resize_image(image_path):
-    basewidth = 300
+    basewidth = 200
 
     img = Image.open(image_path)
 
     wpercent = (basewidth / float(img.size[0]))
     hsize = int((float(img.size[1]) * float(wpercent)))
-
+    hsize = hsize - (hsize % 5)
     img = img.resize((basewidth, hsize), Image.ANTIALIAS)
     img.save(image_path)
+    # print(hsize)
     return True
 
 
+# def resize_image_specific(image_path, basewidth,hsize):
+#     img = Image.open(image_path)
+#     img = img.resize((basewidth, hsize), Image.ANTIALIAS)
+#     img.save(image_path)
+#     return
+
+
 def make_image_tiles(image_path, directory_name):
-    img_format = ".jpg"
+    img_format = ".png"
 
     directory_path = os.path.join(common_image_tiles_path, directory_name)
 
@@ -78,7 +86,7 @@ def hash_compare_and_highlight(source_image_tiles_hash, target_image_tiles_hash,
             # img_with_border = ImageOps.expand(img, border=1, fill='green')
             # img_with_border = img_with_border.resize((width, height), Image.ANTIALIAS)
             # img_with_border.save(tiles_directory + "/" + target_image_tiles_paths[COUNTER])
-            cv2.rectangle(img, (0, 0), (dimensions[1]-1, dimensions[0]-1), (0, 255, 0), 1)
+            cv2.rectangle(img, (0, 0), (dimensions[1] - 1, dimensions[0] - 1), (0, 255, 0), 1)
             cv2.imwrite(tiles_directory + "/" + target_image_tiles_paths[COUNTER], img)
             # cv2.imshow('image', img)
             # cv2.waitKey(0)
@@ -87,14 +95,13 @@ def hash_compare_and_highlight(source_image_tiles_hash, target_image_tiles_hash,
 
     joined = image_slicer.open_images_in(tiles_directory)
     join = image_slicer.join(joined)
-
     rgb_im = join.convert('RGB')
     rgb_im.save(target_image_path)
 
 
 def identify_and_highlight(source_frame_path, target_frame_path):
     global source_image_path, target_image_path
-
+    print(source_image_path, target_image_path)
     source_image_path = source_frame_path
     target_image_path = target_frame_path
 
@@ -116,12 +123,13 @@ def identify_and_highlight(source_frame_path, target_frame_path):
     hash_compare_and_highlight(source_image_tiles_hash, target_image_tiles_hash, target_tiles_dir_name)
 
 
-
 def main():
     import cv2
     # img = cv2.imread("source_frames/image0.jpg")
     # print(img.shape)
 
-    # identify_and_highlight("source_frames/9_original.png", "target_frames/9_forged.png")
-    identify_and_highlight("source_frames/original.png", "target_frames/target.png")
+    # identify_and_highlight("data/orig.png", "data/orig copy.png")
+    identify_and_highlight("source_frames/image00002.png", "target_frames/image00002.png")
+
+
 main()

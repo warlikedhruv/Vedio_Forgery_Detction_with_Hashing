@@ -4,13 +4,15 @@ import shutil
 from PIL import Image
 
 def resize_image(image_path):
-    basewidth = 300
+    basewidth = 200
 
     img = Image.open(image_path)
 
     wpercent = (basewidth / float(img.size[0]))
+    #hsize = int((float(img.size[1]) * float(wpercent)))
+    # print(hsize)
     hsize = int((float(img.size[1]) * float(wpercent)))
-
+    hsize = hsize - (hsize % 5)
     img = img.resize((basewidth, hsize), Image.ANTIALIAS)
     img.save(image_path)
     return True
@@ -26,8 +28,8 @@ def getFrame(sec, count, vidcap, save_file_directory):
     vidcap.set(cv2.CAP_PROP_POS_MSEC, sec * 1000)
     hasFrames, image = vidcap.read()
     if hasFrames:
-        cv2.imwrite(save_file_directory +"/image" + str(count) + ".jpg", image)
-        resize_image(save_file_directory +"/image" + str(count) + ".jpg")# save frame as JPG file
+        cv2.imwrite(save_file_directory +"/image" + str(count) + ".png", image)
+        resize_image(save_file_directory +"/image" + str(count) + ".png")# save frame as JPG file
     return hasFrames
 
 
